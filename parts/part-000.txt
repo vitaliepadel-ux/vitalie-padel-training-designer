@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f3b78">
+<title>Padel Training Designer V48</title>
+<style>
+:root{--bg:#eef4f8;--panel:#fff;--line:#d7e2ea;--ink:#17324a;--muted:#5f7b90;--blue:#0f5ea7;--navy:#102f63;--yellow:#ffd45d}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,#f7fbff,#eaf2f8);color:var(--ink);-webkit-tap-highlight-color:transparent}
+.page{max-width:1680px;margin:auto;padding:12px}.top{display:flex;gap:12px;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--line);border-radius:20px;padding:10px 14px;box-shadow:0 10px 24px #1232 0;margin-bottom:10px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}.brand img{width:132px;height:66px;object-fit:contain}.brand h1{font-size:22px;margin:0;color:var(--navy)}.brand p{font-size:11px;color:var(--muted);margin:4px 0 0}
+.meta{display:flex;gap:7px}.meta input,input[type=text],input[type=file],textarea{border:1px solid var(--line);border-radius:11px;background:#fff;padding:9px;font:inherit}.meta input{width:175px}
+.workspace{display:grid;grid-template-columns:310px minmax(0,1fr);gap:10px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:10px;box-shadow:0 10px 28px rgba(15,38,58,.09)}
+.dock{background:#f8fbfd;border:1px solid var(--line);border-radius:16px;padding:9px;display:flex;flex-direction:column;gap:8px;position:sticky;top:8px;max-height:96vh;overflow:auto}
+.group{background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px}.group h3{margin:0 0 7px;font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#4d6980}
+.palette{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.tool{display:flex;align-items:center;gap:6px;border:1px solid #dce6ee;border-radius:11px;padding:5px;background:#fff;cursor:pointer;min-width:0;user-select:none;touch-action:manipulation}
+.tool img{width:48px;height:54px;object-fit:contain;pointer-events:none}.tool span{font-size:9px;font-weight:800;line-height:1.05}.tool.active{outline:3px solid #81b8e5;background:#edf7ff}
+.row{display:flex;flex-wrap:wrap;gap:5px}.fields{display:flex;flex-direction:column;gap:6px}.fields label{font-size:10px;font-weight:800;color:#527089}
+button{border:0;border-radius:10px;padding:9px 10px;background:#e8f0f7;color:#17324a;font-weight:800;cursor:pointer;touch-action:manipulation}.primary{background:linear-gradient(135deg,#1765ad,#102f63);color:#fff}.danger{background:#ffe8e8;color:#a12626}.activeBtn{outline:3px solid #9ac6e8;background:#edf7ff}
+.status{font-size:10px;color:var(--muted);padding:6px 2px}
+.boardcol{min-width:0}.board{border:1px solid var(--line);border-radius:16px;padding:7px;background:#fff;overflow-x:auto;-webkit-overflow-scrolling:touch}.boardtitle{font-size:11px;font-weight:900;color:#45657f;margin:2px 2px 6px}
+#stage{position:relative;width:100%;aspect-ratio:4/3;min-height:820px;border-radius:13px;overflow:hidden;background:#eef4f8;touch-action:pan-x pan-y}
+#court{position:absolute;inset:0;width:100%;height:100%;z-index:1}#items{position:absolute;inset:0;z-index:2}#draw{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;touch-action:none}
+#stage.arrow #draw,#stage.pencil #draw{pointer-events:auto}#stage.arrow,#stage.pencil{touch-action:none}#stage.arrow #items,#stage.pencil #items{pointer-events:none}
+.item{position:absolute;display:flex;align-items:center;justify-content:center;transform-origin:center;touch-action:none;user-select:none;cursor:grab}.item img{width:100%;height:100%;object-fit:contain;pointer-events:none}.item.selected{outline:2px dashed var(--yellow);border-radius:9px}.badge{position:absolute;right:-5px;bottom:-4px;width:26px;height:26px;border-radius:50%;background:#fff;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900}
+.handle{display:none}.selected>.handle{display:block;position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;border:2px solid var(--ink);z-index:5}.resize{right:-9px;bottom:-9px}.rotate{left:50%;top:-28px;transform:translateX(-50%)}
+.textItem{padding:5px 8px;background:#fffffff2;border:1px solid #3554;border-radius:9px;color:var(--ink);font-size:12px;font-weight:800;text-align:center;min-width:85px;min-height:28px}
+.notes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}.card{border:1px solid var(--line);border-radius:13px;padding:8px;background:#fff}.card label{display:block;font-size:10px;font-weight:900;margin-bottom:4px}.card textarea{width:100%;min-height:68px;resize:vertical}
+@media(max-width:1050px){.workspace{grid-template-columns:270px 1fr}#stage{min-height:650px}.notes{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){
+.page{padding:4px}.top{border-radius:13px;padding:7px;display:block}.brand img{width:86px;height:48px}.brand h1{font-size:16px}.brand p{font-size:9px}.meta{margin-top:6px;display:grid;grid-template-columns:1fr 1fr}.meta input{width:100%;font-size:11px;padding:7px}
+.workspace{display:flex;flex-direction:column;padding:5px;border-radius:13px}.dock{position:relative;top:auto;max-height:none;overflow:visible;width:100%;padding:5px;gap:6px;order:1}.boardcol{order:2}
+.group{width:100%;padding:6px}.palette{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.tool{flex-direction:column;justify-content:center;text-align:center;padding:4px 2px;min-height:78px}.tool img{width:42px;height:45px}.tool span{font-size:7.5px}
+button{min-height:40px;padding:7px 8px;font-size:10px}.fields input{min-height:38px;font-size:11px}.board{padding:4px}.boardtitle{font-size:9px}
+#stage{width:680px;min-height:540px;aspect-ratio:4/3}.notes{grid-template-columns:1fr;gap:5px}.selected>.handle{width:24px;height:24px}.resize{right:-12px;bottom:-12px}.rotate{top:-36px}
+}
+@media(max-width:390px){.palette{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="top">
+    <div class="brand"><img src="data:image/webp;base64,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" alt="logo"><div><h1>Padel Training Designer</h1><p>CEAUȘ VITALIE · PADEL COACH — proiectare exerciții și pregătire funcțională</p></div></div>
+    <div class="meta"><input id="session" type="text" placeholder="Denumirea sesiunii"><input id="duration" type="text" placeholder="Durată, ex. 60 min"></div>
+  </header>
+  <main class="workspace">
+    <aside class="dock">
+      <section class="group"><h3>Jucători și mingi</h3><div class="palette" id="players"></div></section>
+      <section class="group"><h3>Echipament sportiv</h3><div class="palette" id="equipment"></div></section>
+      <section class="group"><h3>Text și desen</h3>
+        <div class="row"><button id="moveBtn" class="activeBtn">Mutare</button><button id="pencilBtn">✎ Creion</button><button id="arrowBtn">➜ Săgeată</button><button id="undoBtn">Undo</button><button id="clearBtn" class="danger">Șterge tot</button></div>
+        <div class="fields" style="margin-top:7px"><input id="textInput" type="text" placeholder="Scrie textul..."><button id="textBtn" class="primary">T Adaugă text</button><label>Grosime creion / săgeată</label><input id="stroke" type="range" min="1" max="8" value="3"><button id="eraseDraw">Șterge desenele</button></div>
+      </section>
+      <section class="group"><h3>Obiect selectat</h3><div class="fields"><label>Dimensiune</label><input id="size" type="range" min="20" max="200" value="70"><label>Rotire</label><input id="rotation" type="range" min="0" max="359" value="0"><div class="row"><button id="left">↺ -15°</button><button id="right">↻ +15°</button><button id="deleteBtn" class="danger">Șterge obiect</button></div></div></section>
+      <section class="group"><h3>Imagine proprie</h3><div class="fields"><input id="upload" type="file" accept="image/*"><button id="addUpload">Adaugă imaginea</button></div></section>
+      <section class="group"><h3>Export</h3><div class="row"><button id="png" class="primary">Export PNG</button><button id="pngPrint">PNG tipar</button><button id="print">Tipărește</button></div></section>
+      <div class="status" id="status">Selectează un obiect, apoi atinge terenul.</div>
+    </aside>
+    <div class="boardcol">
+      <section class="board">
+        <div class="boardtitle">TEREN DE PADEL · PROIECTARE EXERCIȚII</div>
+        <div id="stage">
+          <svg id="court" viewBox="0 0 1200 720" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="courtFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fa6d8"/><stop offset="1" stop-color="#4a96cc"/></linearGradient>
+              <pattern id="netPattern" patternUnits="userSpaceOnUse" width="10" height="10"><rect width="10" height="10" fill="#e8f2fa"/><path d="M0 0H10M0 5H10M0 10H10M0 0V10M5 0V10M10 0V10" stroke="#7d95a7" stroke-width="1"/></pattern>
+            </defs>
+            <rect width="1200" height="720" fill="#f6fafc"/>
+            <polygon points="250,45 950,45 1135,675 65,675" fill="#555b61"/>
+            <polygon points="270,65 930,65 1105,655 95,655"
